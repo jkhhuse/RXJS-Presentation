@@ -1,0 +1,91 @@
+<div class="container">
+  <div class="explanation">
+    <markdown ngPreserveWhitespaces>
+      ## 什么是RxJs
+      - 很多人都听说过Reactive，但听起来先进却有神秘
+      - 你经常会看到类似于`flatMap`和`Observable`的文档
+
+      _Documentation_
+
+      `Projects each source value to an Observable which is merged in the output Observable.`
+      ```javascript
+      flatMap< T, I, R>(project: (value: T, index: number) => ObservableInput< I >,
+      resultSelector?: ((outerValue: T, innerValue: I, outerIndex: number, innerIndex: number) => R) |
+      number, concurrent: number = Number.POSITIVE_INFINITY): OperatorFunction< T, I | R>
+      ```
+
+      - 类似于这种对于刚接触RxJs的人员不友好的文档说明
+      - Rx(reactive programming)是以事件流(event streams)的方式进行编程
+      - 事件流(event streams)是随着时间的推移发生的一系列事件，可以将其视为异步数组
+      ![event streams](../../assets/1.png)
+      - 事件随着时间的推移而发生，我们可以为整个序列添加一个事件监听器
+      - 每当事件发生时都可以触发异步事件
+      ## 在JavaScript中看到的另一种类型的序列是数组，数组的内容是存在内存中的
+
+      ```javascript
+      var source = ['1', '1', 'foo', '2', '3', '5', 'bar', '8', '13'];
+
+      var result = source;
+
+      console.log(result);
+      ```
+
+      - 对于事件流而言，事件流可能会随着时间的推移而发生，流的内容是不可预估的(不要从我们的上帝视角看待)
+
+      ```javascript
+      var source = interval(400).pipe(
+      take(9),
+      map(i => ['1', '1', 'foo', '2', '3', '5', 'bar', '8', '13'][i])
+      )
+      var result = source;
+      result.subscribe(x => console.log(x));
+      ```
+
+      - 事件流每400s发出一次事件
+      - 通过调用subscribe向源事件流添加事件监听器
+      - 每当事件发生时调用方法观察其`行为`
+
+      _事件流与数组不同，但是使用的方法却十分类似_
+
+      - 现在假设需要在不依赖`for`循环的条件下将源数组转化为纯数字的数组
+
+      ```javascript
+      var result = source
+      .map(x => parseInt(x));
+      // [1, 1, NaN, 2, 3, 5, NaN, 8, 13]
+      ```
+
+      - 剔除那些不是数字的字符
+
+      ```javascript
+      var result = source
+      .map(x => parseInt(x))
+      .filter(x => !isNaN(x));
+      // [1,1,2,3,5,8,13]
+      ```
+
+      - 假设我们想求得数组之和
+
+      ```javascript
+      var result = source
+      .map(x => parseInt(x))
+      .filter(x => !isNaN(x))
+      .reduce((x, y) => x + y);
+      // 33
+      ```
+
+      - 对事件流应用同样的需求
+
+      ```javascript
+      var result = source.pipe(
+      map(x => parseInt(x)),
+      filter(x => !isNaN(x)),
+      reduce((x, y) => x + y)
+      )
+      ```
+    </markdown>
+  </div>
+  <div class="code">
+
+  </div>
+</div>

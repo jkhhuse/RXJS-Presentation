@@ -1,0 +1,24 @@
+.result {
+  width: 30%;
+  height: 500px;
+  display: flex;
+  flex-flow: column wrap;
+  justify-content: center;
+  align-content: flex-start;
+}
+
+.result-value {
+  border-radius: 3px;
+  border: 1px solid gray;
+  margin-top: 20px;
+  width: 150px;
+  margin-left: 40px;
+}
+
+.explanation{
+  width: 70%;
+  height: 500px;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+}

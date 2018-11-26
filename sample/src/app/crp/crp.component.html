@@ -1,0 +1,47 @@
+<div class="container">
+  <div class="result">
+    <div class="result-value">Value of A is {{valueC$ | async}}</div>
+    <div class="result-value">Value of B is {{valueD$ | async}}</div>
+    <div style="width: 250px; margin-top: 20px">😇B 的值总是等于 A的值 * 10😇</div>
+  </div>
+  <div class="explanation">
+    <markdown ngPreserveWhitespaces>
+      ## 为何使用Reactive Programming
+      ### 允许在声明阶段动态地定义变量
+
+      ```javascript
+      var a = 3;
+      var b = 10 * a;
+      console.log(b);
+
+      var a = 4;
+      console.log(b)
+      ```
+
+      - 当a发生变化时b的值并不会发生变化
+
+      _这不是所期待的动态定义变量_
+
+      ### 使用Reactive的方式实现
+
+      ```javascript
+      var streamA = of(3);
+      var streamB = streamA.pipe(map(a =>  10 * a));
+      // streamA = streamA.set(4);
+      // 在此处对streamA进行修改并不符合 在声明阶段动态地的原则😡
+      // 直接在变量的声明阶段保持动态才是我们希望实现的😎
+      // var streamA = of(3, 4, 5);
+      streamB.subscribe(b => console.log(b));
+      ```
+    </markdown>
+    <markdown ngPreserveWhitespaces>
+      ### 使用Reactive的概念利用Stream去实现
+      ```javascript
+      this.valueC$ = interval(2000).pipe(take(10));
+      this.valueD$ = this.valueC$.pipe(
+      map((a: number) => 10 * a)
+      );
+      ```
+    </markdown>
+  </div>
+</div>

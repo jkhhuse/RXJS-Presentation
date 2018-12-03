@@ -1,2 +1,85 @@
-<button mat-button color="primary" class="button">Primary</button>
-&nbsp;&nbsp;&nbsp;<span>-</span>
+<div class="container">
+  <div class="action">
+    <h4>使用Angular指令实现对双击事件的监控🦊</h4>
+    <button appDoubleClick mat-button color="warn">点击我</button>
+    <div>
+      <h4>使用Rxjs指令实现对双击和单击事件的监控🦋</h4>
+      <button #button mat-button color="warn" (click)="clickEvent()">双击我</button>
+      <br>
+      <mat-chip-list>
+        <mat-chip>{{label}}</mat-chip>
+      </mat-chip-list>
+    </div>
+  </div>
+  <div class="explanation">
+    <markdown ngPreserveWhitespaces>
+      ## 封装好的Angular双击事件订阅实现🌭
+      - 在Angular中有订阅双击事件可能有很多用途
+      - 在此仅以指令中的用法举例
+
+      ```typescript
+      import {{ '{' }} Directive, HostListener } from '@angular/core';
+
+      @Directive({{ '{' }}
+      selector: '[appDoubleClick]'
+      })
+      export class DoubleClickDirective {{ '{' }}
+      constructor(){{ '{' }} }
+
+      @HostListener('dblclick') onDoubleClicked(){{ '{' }}
+      console.log('double clicked');
+      }
+      }
+      ```
+
+      ## 开箱的rxjs双击事件订阅实现🍔
+
+      - 假设存在需求: 根据用户单击和双击分别触发异步方法，简单来说
+      1. 单击时记录触发单击事件
+      2. 双击时记录触发双击事件
+      3. 根据可能的需求只记录触发双击的事件
+
+      ```typescript
+      // 根据什么时间决定用户进行了双击操作
+      doubleClickDuration = 250;
+      // 获取模板中button的引用
+      @ViewChild('button', {{ '{' }}read: ElementRef})
+      button: ElementRef;
+      leftClick$: any;
+      label: string;
+      clickEvent() {{ '{' }}
+      // 从按钮点击事件中创建事件流
+      this.leftClick$ = fromEvent(this.button.nativeElement, 'click')
+        .pipe(
+        // 只选取左键点击的事件
+          filter((event: any) => event.button === 0)
+        );
+        // 对事件进行debounce处理保证在规定时间内触发过一次
+      const debounce$ = this.leftClick$
+        .pipe(debounceTime(this.doubleClickDuration));
+        // 确保事件在两次点击后终止
+      const clickLimit$ = this.leftClick$
+        .pipe(
+          bufferCount(2),
+        );
+      const bufferGate$ = race(debounce$, clickLimit$).pipe(
+      // 对于系列事件只保留第一个事件之后重启事件流
+        first(),
+        repeat(),
+      )
+      // 业务逻辑实现，根据用户点击决定buffer的次数(length)
+      this.leftClick$.pipe(
+        buffer(bufferGate$),
+        // Here we map the buffered events into the length of the buffer
+        // If the user clicked once, the buffer is 1. If he clicked twice it is 2
+        map((clicks: any) => clicks.length),
+        filter(length =>  length === 2)
+      ).subscribe(clicks => {{ '{' }}
+      console.log('double clicked');
+      this.label = 'double clicked';
+      });
+      }
+      ```
+    </markdown>
+  </div>
+</div>

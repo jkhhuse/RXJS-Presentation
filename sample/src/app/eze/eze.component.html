@@ -1,0 +1,101 @@
+<div class="container">
+  <div class="title">
+    业务中可能用到的rxjs的例子🚲
+  </div>
+  <div class="examples">
+    <div>
+      <h2>使用moment.js显示评论提交时间场景⏱</h2>
+      <span>您已提交评论于 {{time}}</span>
+      <markdown ngPreserveWhitespaces>
+        ### 使用定时器的方式虽然可以实现
+        ```javascript
+        tick() {{'{'}}
+        this.time = moment(createAt).fromNow()
+        setTimeout(tick.bind(this), 1000)
+        }
+        ```
+
+        - 但组件并不一定只有一个定时器任务
+        - 整个界面上可能就有很多定时器在同时执行
+        - 常规优化可以把定时器做成一种服务，把业务上需要周期执行的内容放入服务执行
+
+        - 如果使用RxJS会更容易
+
+        ```typescript
+        interval(1000).subscribe(() => {{'{'}}
+        this.time = moment(createAt).fromNow();
+        }
+        );
+        ```
+      </markdown>
+    </div>
+    <div>
+      <h2>对业务数据展示时间轴的控制🎛</h2>
+      <h5>Observable A 的值为{{timeA$ | async}}</h5>
+      <span> A 是由定时器产生的，每秒一个值</span>
+      <h5>Observable B的值为{{timeB$ | async}}</h5>
+      <span>B 由A流过滤掉非质数和质数的倍数构成</span>
+      <h5>Observable C的值为{{timeC$ | async}}</h5>
+      <span>C在B的基础上，对每两个间距在3秒之内的值进行了处理，只留下后一个值</span>
+      <h5>Observable D的值为{{timeD$ | async}}</h5>
+      <span>D把C的结果整体向后平移了2秒</span>
+    </div>
+    <div>
+      <h2>获取某一段流的内容🌊</h2>
+      <h5>😃人的记忆:&nbsp;{{human$ |async}}</h5>
+      <span>人能够记住下所有的内容</span>
+      <h5>🐟鱼的记忆:&nbsp;{{fish$ |async}}</h5>
+      <span>鱼只能记住3s的内容</span>
+      <markdown ngPreserveWhitespaces>
+        ```typescript
+        const info = '我是一个人不是一条鱼'
+        this.info$ = from(info.split(''));
+        this.human$ = this.info$.pipe(reduce((acc, curr) => {{'{'}}
+        return acc + '' + curr;
+        }))
+        this.fish$ = this.info$.pipe(takeLast(3), reduce((acc, curr) => {{'{'}}
+        return acc + '' + curr;
+        }));
+        ```
+
+        - 需要注意的是，take，takeLast，Last等操作符只能于已经处于`complete`状态的流中生效
+        - 换句话说，在尚未`complete`的流中使用上述操作符无效
+      </markdown>
+    </div>
+    <div>
+      <h2>更合理的用户搜索方案🤝</h2>
+      <mat-form-field style="width: 200px;">
+        <input matInput placeholder="用户输入" value="" [formControl]="queryField" type="text" autofocus>
+      </mat-form-field>
+      <h6>发送到服务端的搜索字段:&nbsp;{{displayValue$ | async}}</h6>
+      <br>
+      <markdown ngPreserveWhitespaces>
+        - 忽略重复的输入内容
+        - debounce输入内容
+        - 排除为空的搜索内容
+
+        ```typescript
+        this.displayValue$ = this.queryField.valueChanges.pipe(
+        debounceTime(1000),
+        distinctUntilChanged(),
+        filter(s => {{'{'}}
+        return s.length > 0;
+        })
+        );
+        ```
+      </markdown>
+    </div>
+    <!--<div>-->
+    <!--<h2>xxx</h2>-->
+    <!--</div>-->
+    <!--<div>-->
+    <!--<h2>xxx</h2>-->
+    <!--</div>-->
+    <!--<div>-->
+    <!--<h2>xxx</h2>-->
+    <!--</div>-->
+    <!--<div>-->
+    <!--<h2>xxx</h2>-->
+    <!--</div>-->
+  </div>
+</div>

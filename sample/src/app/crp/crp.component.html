@@ -2,11 +2,15 @@
   <div class="result">
     <div class="result-value">Value of A is {{valueC$ | async}}</div>
     <div class="result-value">Value of B is {{valueD$ | async}}</div>
-    <div style="width: 250px; margin-top: 20px">😇B 的值总是等于 A的值 * 10😇</div>
+    <div style="width: 250px; margin-top: 20px;">😇B 的值总是等于 A的值 * 10😇</div>
+    <div class="stream-button">
+      <h6>例子2触发两个number类型的Stream相加</h6>
+      <button mat-button color="primary" (click)="triggerSum()">触发Stream相加</button>
+    </div>
   </div>
   <div class="explanation">
     <markdown ngPreserveWhitespaces>
-      ## 为何使用Reactive Programming
+      ## 为何使用Reactive Programming😎
       ### 允许在声明阶段动态地定义变量
 
       ```javascript
@@ -33,15 +37,45 @@
       // var streamA = of(3, 4, 5);
       streamB.subscribe(b => console.log(b));
       ```
+
+      ### 换一种说法
+      - a,b,c三个变量间存在如下关系
+
+      ```bash
+      a  = b + c
+      ```
+
+      - 在传统编程思维下这是一次性的赋值过程，调用一次实现对a的赋值
+      - 而之后无论b和c的值如何变化，都不再影响a的值
+      _在Reactive的理念中，这并不是一个一次性赋值的过程_
+      - 可重复赋值的过程(表达式是作为变量关系来表达而非编程赋值)
+      - 定义出这种关系之后每次b或者c产生改变，这个表达式都会被重新计算
     </markdown>
     <markdown ngPreserveWhitespaces>
-      ### 使用Reactive的概念利用Stream去实现
+      ### 使用Reactive的概念利用Stream去实现之前的例子1🤩
       ```javascript
       this.valueC$ = interval(2000).pipe(take(10));
       this.valueD$ = this.valueC$.pipe(
       map((a: number) => 10 * a)
       );
       ```
+      - 虽然在这里我们仅仅使用简单的事件流进行处理
+      - 需要着眼的并不是在本例子中创建了什么样的流
+      - 而是使用了Reactive的event Stream的概念
+
+      ### 使用Reactive概念利用Stream实现之前的例子2🤔
+      ```javascript
+      this.streamA$ = interval(100).pipe(take(3));
+      this.streamB$ = interval(100).pipe(take(3));
+      this.streamC$ = combineLatest(this.streamA$, this.streamB$).pipe(
+      tap(numbers =>  console.log(numbers)),
+      map(numbers => numbers.reduce((sum, n) => sum + n, 0))
+      )
+      this.subscription2 = this.streamC$.subscribe(val =>
+      console.log('数据值和为: ' + val);
+      );
+      ```
+      _我们再来一个复杂一些的流的例子🧐_
     </markdown>
   </div>
 </div>

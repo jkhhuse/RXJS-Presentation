@@ -1,5 +1,5 @@
 .result {
-  width: 30%;
+  width: 25%;
   height: 500px;
   display: flex;
   flex-flow: column wrap;
@@ -15,10 +15,18 @@
   margin-left: 40px;
 }
 
-.explanation{
+.explanation {
   width: 70%;
-  height: 500px;
+  height: auto;
   display: flex;
-  flex-flow: row wrap;
+  flex-flow: column wrap;
   justify-content: space-around;
+}
+
+.stream-button {
+  width: 200px;
+  display: flex;
+  flex-flow: column wrap;
+  justify-content: center;
+  align-content: center;
 }

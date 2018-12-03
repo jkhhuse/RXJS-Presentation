@@ -1,8 +1,9 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {of} from 'rxjs/internal/observable/of';
-import {map, take} from 'rxjs/operators';
+import { combineLatest, of} from 'rxjs';
+import {map, take, tap} from 'rxjs/operators';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {interval} from 'rxjs/internal/observable/interval';
+import {merge, Observable} from 'rxjs';
 
 @Component({
   selector: 'app-crp',
@@ -16,6 +17,9 @@ export class CrpComponent implements OnInit, OnDestroy {
   valueD$: any;
   subscription1: Subscription;
   subscription2: Subscription;
+  streamA$: Observable<any>;
+  streamB$: Observable<any>;
+  streamC$: any;
   constructor() { }
 
   ngOnInit() {
@@ -31,7 +35,19 @@ export class CrpComponent implements OnInit, OnDestroy {
       map((a: number) => 10 * a)
     );
   }
+  triggerSum() {
+    this.streamA$ = interval(100).pipe(take(3));
+    this.streamB$ = interval(100).pipe(take(3));
+    this.streamC$ = combineLatest(this.streamA$, this.streamB$).pipe(
+      tap(numbers =>  console.log(numbers)),
+      map(numbers => numbers.reduce((sum, n) => sum + n, 0))
+    )
+    this.subscription2 = this.streamC$.subscribe(val => {
+      console.log('数据值和为: ' + val);
+    });
+  }
   ngOnDestroy() {
     this.subscription1.unsubscribe();
+    this.subscription2.unsubscribe();
   }
 }

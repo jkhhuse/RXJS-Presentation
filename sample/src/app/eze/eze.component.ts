@@ -10,7 +10,7 @@ import {FormControl} from "@angular/forms";
   styleUrls: ['./eze.component.css']
 })
 export class EzeComponent implements OnInit {
-  time: any;
+  time$: any;
   timeA$: Observable<any>;
   timeB$: Observable<any>;
   timeC$: Observable<any>;
@@ -30,7 +30,7 @@ export class EzeComponent implements OnInit {
   ngOnInit() {
     const createAt = new Date();
     interval(1000).subscribe(() => {
-        this.time = moment(createAt).fromNow();
+        this.time$ = moment(createAt).fromNow();
       }
     );
     this.timeA$ = interval(1000);

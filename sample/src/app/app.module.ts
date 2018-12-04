@@ -17,6 +17,11 @@ import { HelloComponent } from './hello/hello.component';
 import { EzeComponent } from './eze/eze.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { ConclusionComponent } from './conclusion/conclusion.component';
+import { BeforeComponent } from './before/before.component';
+import { IntroToRxComponent } from './intro-to-rx/intro-to-rx.component';
+import { FunctionalProgrammingComponent } from './functional-programming/functional-programming.component';
+import { ReactiveProgrammingComponent } from './reactive-programming/reactive-programming.component';
+import { FunctionalProgrammingTrainingComponent } from './functional-programming-training/functional-programming-training.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -27,6 +32,11 @@ import { ConclusionComponent } from './conclusion/conclusion.component';
     HelloComponent,
     EzeComponent,
     ConclusionComponent,
+    BeforeComponent,
+    IntroToRxComponent,
+    FunctionalProgrammingComponent,
+    ReactiveProgrammingComponent,
+    FunctionalProgrammingTrainingComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,173 @@
+<div class="container">
+  <markdown ngPreserveWhitespaces>
+    ## 函数式编程
+
+    - 使用函数来解决问题的编程方式
+
+    ## 几点特殊的要求
+
+    1. 声明式(Declarative)
+    2. 纯函数(Pure function)
+    3. 数据不可变(immutability)
+
+    - 从语言上说
+
+    - JavaScript并不是纯粹的函数式语言
+    - 但是这并不妨碍Js写出函数式的代码
+
+    ### 声明式
+
+    - 和声明式相对应的是`命令式`编程
+
+    - 实现一个双倍函数
+
+    ```javascript
+    function double(arr) {{'{'}}
+      const result = [];
+      for(let i = 0; i < arr.length; i++) {{'{'}}
+        result.push(arr[i] * 2);
+      }
+      return result;
+    }
+    ```
+
+    - 上述代码是很典型的命令式编程风格
+
+    - 继续实现一个加一函数
+
+    ```javascript
+    function addOne(arr) {{'{'}}
+      const result = [];
+      for(let i = 0; i < arr.length; i++) {{'{'}}
+        result.push(arr[i] + 1);
+      }
+      return result;
+    }
+    ```
+
+    - 两个函数的模式非常相似？
+
+    1. 循环数组
+    2. 对数组的元素进行操作
+    3. 将操作结果交给另一个数组
+
+    - 为什么不简介一些: 比如使用map函数
+
+    ```javascript
+    function double(arr) {{'{'}}
+      return arr.map(function(item) {{'{'}}return item * 2});
+    }
+
+    function addOne(arr) {{'{'}}
+      return arr.map(function(item) {{'{'}}return item +1});
+    }
+    ```
+
+    - map函数提供了一个函数类型的参数，这个函数用于定制对每个数组元素如何处理
+
+    - 声明式编程对double函数的解读: 把一个数组映射到另一个数组，并将每个对应的元素都乘2
+
+    - 相较之于第一版的double函数和addOne函数，使用了声明式编程的第二版函数更加简洁明了和易于维护
+
+    - 借助于Es6的arrow function甚至可以更加简洁
+
+    ```javascript
+    const double = arr => arr.map(item => item * 2);
+    const addOne = arr => arr.map(item => item + 1);
+    ```
+
+    - 虽然double和addOne函数的功能看上去是`将数组的每个元素 * 2/ + 1`,
+    - 但实际上并没有去修改作为参数传进函数的数组arr，而是产生了一个新的数组
+    - 这则涉及到了函数式编程的另一个重要特征:纯函数
+
+    ### 纯函数
+
+    - 分析double函数
+
+    ```javascript
+    const arr = [1,2,3];
+    const newArr = double(arr);
+    console.log(arr); // [1,2,3]
+    console.log(newArr); //[2,4,6]
+    ```
+
+    - double函数返回了一个新的数组，两个数组中的数据相互独立互不干扰
+    - double函数是一个纯函数
+
+    #### 纯函数需要满足两个条件
+
+    1. 函数的执行过程完全由输入参数决定，不会受到除参数之外的任何数据的影响
+    2. 函数不会修改任何外部状态，如全局变量或传入的参数对象
+
+    - 虽然这样的要求限制了编程时的灵活性但是带来了巨大的好处
+    - 代码变得简洁，易维护，更少的bug
+
+    - 一个新的例子
+
+    ```javascript
+    const originalArray = [1,2,3];
+    const pushedArray = arrPush(originalArray,4);
+    const doubledPushedArray = double(pushedArray);
+    // pushedArray的值应该为[1,2,3,4];
+    // doubledPushedArray的值应该为[2,4,6,8];
+    ```
+
+    - 那么函数执行完毕后，originalArray的值应该是什么呢
+    - 从代码维护的角度来说，originalArray保持其初值肯定是更期待的
+    - 因为后续可以继续使用originalArray进行计算
+
+    ```javascript
+    console.log(originalArray) // [1,2,3,4]
+    function arrayPush(arr,newValue) {{'{'}}
+      arr.push(newValue);
+      return arr;
+    }
+    ```
+
+    - arrayPush函数直接修改了输入的参数，违背了纯函数的定义`函数不会修改任何外部状态，如全局变量或传入的参数对象`
+    - 改写一下arrayPush函数，将其变为一个纯函数
+
+    ```javascript
+    function arrayPush(arr,newValue) {{'{'}}
+      return [...arr,newValue];
+    }
+    ```
+    - Es6的解构和扩展
+
+    #### 存在纯函数就肯定也存在不纯函数
+
+    - 会导致函数不纯的操作
+
+    1. 修改了全局变量的值
+    2. 改变了输入参数引用的对象
+    3. 读取了用户的输入
+    4. 抛出了异常
+    5. 网络的输入输出操作
+    6. 浏览器的DOM操作
+
+    #### 纯函数的奥义
+
+    - 纯函数就是输入参数到返回结果的一个映射，且该映射不存在副作用
+
+    #### TDD与Unit Test
+
+    ### 数据不可变性(immutable)
+
+    - 程序发挥其作用肯定需要变化的数据
+    - 但并不意味着要去修改现存的数据
+    - 可以选择通过产生新的数据来实现数据的变化
+    - 一旦产生就不可变的数据将有利于代码的理解
+    - javascript中: string/boolean/number 不可变
+    - javascript中对象类型数据可变: 比如数组的`push`，`pop`，`sort`方法都是可变的
+
+    _可能你不是用immutable.js这样的库来实现immutable的特性,但是不可变性的纪律要记在心中_
+
+    ### 函数式编程和面向对象编程的比较
+
+    - 面向对象编程将状态的改变封装起来以达到让代码清晰地目的
+    - 函数式编程则通过减少变化的部分以让代码的逻辑更加清晰
+
+    - 面向对象编程隐藏了数据对象的修改历史
+    - 函数式编程则更容易脚踏实地一步步追溯数据对象的变更历史
+  </markdown>
+</div>

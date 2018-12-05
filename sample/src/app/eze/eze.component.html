@@ -27,6 +27,8 @@
         }
         );
         ```
+
+        <img src="../../assets/4.png" alt="marble-1" width="400">
       </markdown>
     </div>
     <div>
@@ -53,6 +55,8 @@
       this.timeC$ = this.timeB$.pipe(debounceTime(3000));
       this.timeD$ = this.timeC$.pipe(delay(2000));
       ```
+
+      <img src="../../assets/5.png" alt="marble-2" width="400">
       </markdown>
     </div>
     <div>
@@ -75,6 +79,8 @@
 
         - 需要注意的是，take，takeLast，Last等操作符只能于已经处于`complete`状态的流中生效
         - 换句话说，在尚未`complete`的流中使用上述操作符无效
+
+        <img src="../../assets/6.png" alt="marble-2" width="600">
       </markdown>
     </div>
     <div>
@@ -98,6 +104,8 @@
         })
         );
         ```
+
+        <img src="../../assets/7.png" alt="marble-2" width="600">
       </markdown>
     </div>
   </div>

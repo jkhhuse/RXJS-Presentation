@@ -22,6 +22,7 @@ import { IntroToRxComponent } from './intro-to-rx/intro-to-rx.component';
 import { FunctionalProgrammingComponent } from './functional-programming/functional-programming.component';
 import { ReactiveProgrammingComponent } from './reactive-programming/reactive-programming.component';
 import { FunctionalProgrammingTrainingComponent } from './functional-programming-training/functional-programming-training.component';
+
 @NgModule({
   declarations: [
     AppComponent,

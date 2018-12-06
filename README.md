@@ -20,4 +20,5 @@
 
 - 相关代码训练内容位于training文件夹
 
-1. functional programming training
+1. [functional programming training](./traning/functional_programming)
+
